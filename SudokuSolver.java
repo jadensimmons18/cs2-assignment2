@@ -10,7 +10,15 @@
 public class SudokuSolver {
 
     int boardSize = 9;
-    public int solve(int[][] board, int[][] forbiddenPairs);
+    public int solve(int[][] board, int[][] forbiddenPairs){
+        return solveHelper(board, forbiddenPairs, 0, 0);
+    }
+    
+    public int solveHelper(int[][] board, int row, int col){
+        if (row == boardSize && col == boardSize){
+            
+        }
+    }
 
 
     // Returns true if number is valid via classic constraint
