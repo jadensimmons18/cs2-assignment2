@@ -14,10 +14,60 @@ public class SudokuSolver {
         return solveHelper(board, forbiddenPairs, 0, 0);
     }
     
-    public int solveHelper(int[][] board, int row, int col){
-        if (row == boardSize && col == boardSize){
-            
+    public int solveHelper(int[][] board, int[][] forbiddenPairs, int row, int col){
+
+        if (row == boardSize) // if we move past the last row then the board is solved
+        {
+            return 1;
         }
+
+        int nextRow, nextCol;
+
+        if (col == 8) 
+        { // We are at the end of the row
+            nextRow = row + 1;       // Move down
+            nextCol = 0;             // Reset to left
+        } else 
+        {        // Otherwise remain in the same row and incement normally
+            nextRow = row;           
+            nextCol = col + 1;       // Move right
+        }
+
+        // If the space already has a number then move to the next cell
+        if (board[row][col] != 0) 
+        {
+            return solveHelper(board, forbiddenPairs, nextRow, nextCol);
+        }
+
+        int totalSolutions = 0;
+
+        // try numbers 1-9
+        for (int num = 1; num <= 9; num++)
+        {
+            if (isValidClassic(board, row, col, num) && isValidKnight(board, row, col, num) && isValidForbidden(board, forbiddenPairs, row, col, num)) 
+            {
+             // if its valid 
+
+                board[row][col] = num; // place the number in the cell
+
+                int result = solveHelper(board, forbiddenPairs, nextRow, nextCol); // returns 1 if the board was solved by going down this path otherwise it will return total solutions
+
+                totalSolutions += result;
+
+                if (totalSolutions > 1) {
+                    board[row][col] = 0;
+                    return totalSolutions;  // stop early
+                }
+
+                if (result == 1) {
+                    return 1;  // found the only solution; keep board filled
+                }
+
+                board[row][col] = 0;
+            }
+        }
+        return totalSolutions;
+
     }
 
 
