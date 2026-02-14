@@ -4,14 +4,19 @@
     SudokuSolver.java
 */
 
-
-
-
 public class SudokuSolver {
 
     int boardSize = 9;
+    int totalSolutions = 0;
+    int[][] boardCopy = new int[9][9];
     public int solve(int[][] board, int[][] forbiddenPairs){
-        return solveHelper(board, forbiddenPairs, 0, 0);
+        solveHelper(board, forbiddenPairs, 0, 0);
+
+        if (totalSolutions == 1)
+        {
+            copyBoard(boardCopy, board);
+        }
+        return totalSolutions;
     }
     
     public int solveHelper(int[][] board, int[][] forbiddenPairs, int row, int col){
@@ -39,35 +44,38 @@ public class SudokuSolver {
             return solveHelper(board, forbiddenPairs, nextRow, nextCol);
         }
 
-        int totalSolutions = 0;
-
         // try numbers 1-9
         for (int num = 1; num <= 9; num++)
         {
             if (isValidClassic(board, row, col, num) && isValidKnight(board, row, col, num) && isValidForbidden(board, forbiddenPairs, row, col, num)) 
-            {
-             // if its valid 
-
+            {   //if its valid 
                 board[row][col] = num; // place the number in the cell
 
                 int result = solveHelper(board, forbiddenPairs, nextRow, nextCol); // returns 1 if the board was solved by going down this path otherwise it will return total solutions
 
-                totalSolutions += result;
-
-                if (totalSolutions > 1) {
-                    board[row][col] = 0;
-                    return totalSolutions;  // stop early
-                }
-
-                if (result == 1) {
-                    return 1;  // found the only solution; keep board filled
+                if (result == 1) // If the board is solved copy the solution and add to the solution count
+                {
+                    totalSolutions++;
+                    if (totalSolutions == 1)
+                    {
+                        copyBoard(board, boardCopy);
+                    }
                 }
 
                 board[row][col] = 0;
             }
         }
-        return totalSolutions;
+        return 0;
+    }
 
+    // Copies the board
+    public void copyBoard(int[][] board1, int[][] board2){
+        for (int i = 0; i < board1.length; i++){
+            for (int j = 0; j < board1[0].length; j++)
+            {
+                board2[i][j] = board1[i][j];
+            }
+        }
     }
 
 
