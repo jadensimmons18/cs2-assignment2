@@ -51,7 +51,7 @@ public class SudokuSolver {
             {   //if its valid 
                 board[row][col] = num; // place the number in the cell
 
-                int result = solveHelper(board, forbiddenPairs, nextRow, nextCol); // returns 1 if the board was solved by going down this path otherwise it will return total solutions
+                int result = solveHelper(board, forbiddenPairs, nextRow, nextCol); // returns 1 if the board was solved by going down this path otherwise it will return total
 
                 if (result == 1) // If the board is solved copy the solution and add to the solution count
                 {
@@ -61,8 +61,6 @@ public class SudokuSolver {
                         copyBoard(board, boardCopy);
                     }
                 }
-
-                board[row][col] = 0;
             }
         }
         return 0;
